@@ -1,0 +1,12 @@
+{
+  "name": "crawerjs",
+  "version": "0.0.1",
+  "description": "A crawer tool",
+  "main": "src/index.js",
+  "repository": "git@github.com:qk-webgrowers/crawerjs.git",
+  "author": "dirliu <liuqi0702@126.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "crawler": "^1.3.0"
+  }
+}
