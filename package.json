@@ -6,7 +6,9 @@
   "repository": "git@github.com:qk-webgrowers/crawerjs.git",
   "author": "dirliu <liuqi0702@126.com>",
   "license": "MIT",
-  "devDependencies": {
-    "crawler": "^1.3.0"
+  "devDependencies": {},
+  "dependencies": {
+    "crawler": "^1.3.0",
+    "crypto-js": "^4.0.0"
   }
 }
