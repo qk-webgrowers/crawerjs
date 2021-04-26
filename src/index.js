@@ -1,4 +1,5 @@
 const Crawler = require('crawler')
+const {setCookies, getCookies} = require('./utils/cookie')
 // const encrypt = require('./utils/encrypt')
 
 const c = new Crawler({
@@ -22,9 +23,7 @@ const c = new Crawler({
             } 
             var links = $('a')
             Object.values(links).forEach(link => {
-              // console.log('link:', link)
               let href = (link.attribs && link.attribs.href) || ''
-              console.log('href:', href)
               if (!/^javascript:/.test(href) && href) {
                 !(new RegExp('^' + uri.protocol).test(href)) && (href = uri.protocol + '://' + uri.host + href)
                 c.queue(href)
@@ -38,7 +37,7 @@ const c = new Crawler({
 })
 
 // return_url=https%3A%2F%2Fwww.jisilu.cn%2F&user_name=f6252842ba86e3c46219ced23232e108&password=d03f73fcbb855273d66202a9028e2a97&net_auto_login=1&_post_type=ajax&aes=1
-c.queue({
+c.direct({
   uri: 'https://www.jisilu.cn/account/ajax/login_process/',
   method: 'post',
   form: {
@@ -51,7 +50,7 @@ c.queue({
     _post_type: 'ajax',
     aes: 1
   },
-  callback (error, res, done) {
+  callback (error, res) {
     if (error) {
       return 
     }
@@ -59,13 +58,17 @@ c.queue({
       let body = JSON.parse(res.body)
       switch (body.errno) {
         case -1:
-          console.error(body.err || '已登录')
+          console.error(body.err || '登录错误！')
           // c.queue('https://www.jisilu.cn/account/agreement/')
           break
         default: 
+          setCookies(res.headers['set-cookie'])
           setTimeout(() => {
             c.queue({
               uri: 'https://www.jisilu.cn/data/cbnew/cb_list/?___jsl=LST___t=' + Date.now(),
+              headers: {
+                Cookie: getCookies()
+              },
               form: {
                 fprice: '',
                 tprice: '',
@@ -88,7 +91,6 @@ c.queue({
           }, 10)
           // c.queue('https://www.jisilu.cn/account/agreement/')
       }
-      done()
     } catch (error) {
       console.log('eror:', error)
     }  
